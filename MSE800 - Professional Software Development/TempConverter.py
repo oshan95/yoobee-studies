@@ -1,3 +1,7 @@
+# Author: Oshan Mendis
+# Date: 2025-12-06
+# Description: Temperature converter program
+
 class TemperatureConverter:
     def __init__(self, input):
         self.input = input
