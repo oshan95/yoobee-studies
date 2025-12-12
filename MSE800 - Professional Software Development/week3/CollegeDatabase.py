@@ -12,7 +12,7 @@ class CollegeDatabase:
         self.conn = sqlite3.connect(self.db_name)  # Connecting to database
         self.cursor = self.conn.cursor()  # Setting the cursor to run SQL queries
 
-    def create_table(self, table_name, columns: dict):
+    def create_table(self, table_name, columns: dict) -> None:
         """
         table_name: Name of the table
         columns example:
