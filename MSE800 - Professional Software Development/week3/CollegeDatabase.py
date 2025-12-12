@@ -12,7 +12,7 @@ class CollegeDatabase:
         self.conn = sqlite3.connect(self.db_name)  # Connecting to database
         self.cursor = self.conn.cursor()  # Setting the cursor to run SQL queries
 
-    def create_table(self, table_name, columns: dict) -> None:
+    def create_table(self, table_name, columns: dict):
         """
         table_name: Name of the table
         columns example:
@@ -110,6 +110,36 @@ class CollegeDatabase:
         except sqlite3.Error as e:
             print(f"Error deleting records from '{table_name}': {e}")
 
+    def count_students_in_course(self, course_code: str) -> int:
+        sql = """
+        SELECT COUNT(DISTINCT sc.student_id) 
+        FROM student_course sc
+        JOIN course c ON sc.course_id = c.id
+        WHERE c.course_code = ?
+        """
+        try:
+            self.cursor.execute(sql, (course_code,))
+            count = self.cursor.fetchone()[0]
+            return count
+        except sqlite3.Error as e:
+            print(f"Error counting students for course {course_code}: {e}")
+            return 0
+
+    def list_teachers_for_course(self, course_code: str) -> list:
+        sql = """
+        SELECT t.first_name, t.last_name 
+        FROM teacher_course tc
+        JOIN teacher t ON tc.teacher_id = t.id
+        JOIN course c ON tc.course_id = c.id
+        WHERE c.course_code = ?
+        """
+        try:
+            self.cursor.execute(sql, (course_code,))
+            return self.cursor.fetchall()  # List of (first_name, last_name)
+        except sqlite3.Error as e:
+            print(f"Error fetching teachers for course {course_code}: {e}")
+            return []
+
     def close(self) -> None:
         self.conn.close()
 
@@ -151,7 +181,30 @@ if __name__ == "__main__":
         }
     )
 
-    # Insert a student
+    # Create tables with relationships
+    database.create_table(
+        "student_course",
+        {
+            "id": "INTEGER PRIMARY KEY AUTOINCREMENT",
+            "student_id": "INTEGER",
+            "course_id": "INTEGER",
+            "FOREIGN KEY(student_id)": "REFERENCES student(id)",
+            "FOREIGN KEY(course_id)": "REFERENCES course(id)"
+        }
+    )
+
+    database.create_table(
+        "teacher_course",
+        {
+            "id": "INTEGER PRIMARY KEY AUTOINCREMENT",
+            "teacher_id": "INTEGER",
+            "course_id": "INTEGER",
+            "FOREIGN KEY(teacher_id)": "REFERENCES teacher(id)",
+            "FOREIGN KEY(course_id)": "REFERENCES course(id)"
+        }
+    )
+
+    # Insert students
     database.insert_record("student", {
         "first_name": "Oshan",
         "last_name": "Mendis",
@@ -218,5 +271,52 @@ if __name__ == "__main__":
     # Fetch all students after update & deletion
     students = database.fetch_all("student")
     print("All students:", students)
-    
+
+    # Insert courses
+    database.insert_record("course", {
+        "course_name": "Professional Software Engineering",
+        "course_code": "MSE800",
+        "description": "Introduction to Professional Software Engineering principles.",
+        "category": "Engineering"
+    })
+
+    database.insert_record("course", {
+        "course_name": "Research Methods",
+        "course_code": "MSE801",
+        "description": "Advanced concepts in research methods",
+        "category": "Research"
+    })
+
+    # Insert teachers
+    database.insert_record("teacher", {
+        "first_name": "Mohammad",
+        "last_name": "Norouzifard",
+        "email": "Mohammad.Norouzifard@yoobee.com",
+        "phone": "555-1234"
+    })
+
+    database.insert_record("teacher", {
+        "first_name": "Saveeta",
+        "last_name": "Bai",
+        "email": "Saveeta.Bai@yoobee.com",
+        "phone": "555-5678"
+    })
+
+    # Enroll students in courses
+    database.insert_record("student_course", {"student_id": 1, "course_id": 1})  # Student 1 in MSE800
+    database.insert_record("student_course", {"student_id": 2, "course_id": 1})  # Student 2 in MSE800
+
+    # Assign teachers to courses
+    database.insert_record("teacher_course", {"teacher_id": 1, "course_id": 2})  # Teacher 1 teaches MSE801
+    database.insert_record("teacher_course", {"teacher_id": 2, "course_id": 2})  # Teacher 2 teaches MSE801
+
+    student_count = database.count_students_in_course("MSE800")
+    print(f"Number of students enrolled in MSE800: {student_count}")
+
+    teachers = database.list_teachers_for_course("MSE801")
+    print("Teachers teaching MSE801:")
+    for first, last in teachers:
+        print(f"- {first} {last}")
+
     database.close()
+
