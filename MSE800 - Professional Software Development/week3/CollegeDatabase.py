@@ -218,4 +218,5 @@ if __name__ == "__main__":
     # Fetch all students after update & deletion
     students = database.fetch_all("student")
     print("All students:", students)
-
+    
+    database.close()
