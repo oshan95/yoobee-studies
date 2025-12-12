@@ -23,6 +23,7 @@ class FileReader:
         with open(self.file_path, "a") as data:
             data.write(content)
             data.write("\n")
+        data.close()
 
 
 
