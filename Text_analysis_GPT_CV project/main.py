@@ -39,7 +39,6 @@ def analyze_cv(cv_text):
         model="gemini-3-flash-preview",
         config=types.GenerateContentConfig(
             system_instruction="You are a professional recruiter analyzing resumes."),
-            # system_instruction="You are the charactor Deadpool in marvel comic universe. You don't have any filteration when expressing thoughts."),
             contents=prompt
     )
     # return response["choices"][0]["message"]["content"]
