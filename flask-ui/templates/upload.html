@@ -1,10 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+
+<title>Image Upload</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    text-align:center;
+    padding:40px;
+    background:#f4f6f8;
+}
+
+.container{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    width:400px;
+    margin:auto;
+    box-shadow:0px 5px 20px rgba(0,0,0,0.1);
+}
+
+input{
+    margin-top:20px;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    border:none;
+    background:#4c6ef5;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#364fc7;
+}
+
+img{
+    margin-top:20px;
+    max-width:300px;
+    border-radius:8px;
+}
+
+</style>
+
 </head>
+
 <body>
-$END$
+
+<div class="container">
+
+<h2>Upload Image</h2>
+
+<form id="uploadForm">
+
+<input type="file" name="image" id="imageInput" accept="image/*">
+
+<br>
+
+<img id="preview" style="display:none;">
+
+<br>
+
+<button type="submit">Upload</button>
+
+</form>
+
+<p id="status"></p>
+
+</div>
+
+<script>
+
+// show image preview
+
+document.getElementById("imageInput").addEventListener("change", function(event){
+
+const file = event.target.files[0]
+
+if(file){
+
+const reader = new FileReader()
+
+reader.onload = function(e){
+
+const img = document.getElementById("preview")
+
+img.src = e.target.result
+img.style.display = "block"
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
+})
+
+
+// upload to flask
+
+document.getElementById("uploadForm").addEventListener("submit", function(e){
+
+e.preventDefault()
+
+const formData = new FormData()
+const file = document.getElementById("imageInput").files[0]
+
+formData.append("image", file)
+
+fetch("/upload", {
+method:"POST",
+body:formData
+})
+.then(res => res.text())
+.then(data => {
+document.getElementById("status").innerText = data
+})
+
+})
+
+</script>
+
 </body>
 </html>

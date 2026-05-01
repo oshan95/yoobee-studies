@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>BMI Calculator</title>
 </head>
 <body>
-$END$
+
+<h2>BMI Calculator</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Weight (kg)</label>
+    <input type="number" name="weight" required><br><br>
+
+    <label>Height (cm)</label>
+    <input type="number" name="height" required><br><br>
+
+    <button type="submit">Calculate BMI</button>
+
+</form>
+
+{% if bmi %}
+<h3>Your BMI: {{ bmi|floatformat:2 }}</h3>
+<p>Category: {{ category }}</p>
+{% endif %}
+
 </body>
 </html>
