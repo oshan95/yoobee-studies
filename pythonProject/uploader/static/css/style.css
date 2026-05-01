@@ -1,0 +1,33 @@
+
+body{
+    font-family: Arial;
+    background:#f4f4f4;
+}
+
+.container{
+    width:80%;
+    margin:40px auto;
+    display:flex;
+    background:white;
+    border-radius:8px;
+    padding:20px;
+}
+
+.left, .right{
+    width:50%;
+    padding:20px;
+}
+
+button{
+    margin-top:10px;
+    padding:8px 16px;
+    background:#007bff;
+    color:white;
+    border:none;
+}
+
+.preview{
+    max-width:100%;
+    border:1px solid #ddd;
+    padding:10px;
+}
