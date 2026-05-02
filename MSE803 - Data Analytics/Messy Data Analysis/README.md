@@ -89,9 +89,6 @@ No outliers were found in either Age or Salary:
 | Pair | r | Interpretation |
 |---|---|---|
 | Age ↔ Salary | **0.63** | Moderate positive — older employees earn more |
-| Age ↔ Join Year | **−0.64** | Older employees joined earlier — natural career pattern |
-| Country ↔ Salary | **−0.25** | Weak — AUS earns slightly more, but not a strong signal |
-| Salary ↔ Join Year | **−0.03** | Almost zero — when you joined has no effect on pay |
 
 ---
 
