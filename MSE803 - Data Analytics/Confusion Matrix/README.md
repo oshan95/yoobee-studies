@@ -65,13 +65,5 @@ After training, the model was evaluated on **30 unseen test records**. It made *
 - In healthcare, **Recall is typically the priority metric** because false negatives (missed diagnoses) carry a higher risk than false positives.
 - The **F1 Score of 89.7%** reflects a good balance between Precision and Recall.
 
----
-
-## Files
-
-| File | Description |
-|------|-------------|
-| `confusion_matrix_healthcare.xlsx` | Colour-coded confusion matrix with metrics table |
-| `README.md` | This file — activity summary and interpretation |
 
 
